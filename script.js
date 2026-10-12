@@ -1,6 +1,6 @@
 // 1. API ключ и адреса
 const API_KEY = "http://www.omdbapi.com/?i=tt3896198&apikey=d54fd0d";
-const API_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=d54fd0d";
+const API_URL = "http://www.omdbapi.com/?apikey=[yourkey]&";
 const IMAGE_URL = "https://image.tmdb.org/t/p/w200";
 
 // 2. Находим элементы
