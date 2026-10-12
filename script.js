@@ -101,3 +101,22 @@ searchInput.addEventListener("keydown", (event) => {
 
 // Подсказка при открытии страницы
 showMessage("<p>Введите название фильма или дорамы и нажмите «Найти»</p>");
+// ===== Боковое меню =====
+const menuBtn = document.getElementById("menu-btn");
+const closeBtn = document.getElementById("close-btn");
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("sidebar-overlay");
+
+function openMenu() {
+  sidebar.classList.add("active");
+  overlay.classList.add("active");
+}
+
+function closeMenu() {
+  sidebar.classList.remove("active");
+  overlay.classList.remove("active");
+}
+
+if (menuBtn) menuBtn.addEventListener("click", openMenu);
+if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+if (overlay) overlay.addEventListener("click", closeMenu);
