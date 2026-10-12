@@ -1,6 +1,6 @@
 // 1. API ключ и адреса
-const API_KEY = "M93T1WN-K2X4FH2-NXFY35D-BQFEVYR";
-const API_URL = "https://api.themoviedb.org/3";
+const API_KEY = "http://www.omdbapi.com/?i=tt3896198&apikey=d54fd0d";
+const API_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=d54fd0d";
 const IMAGE_URL = "https://image.tmdb.org/t/p/w200";
 
 // 2. Находим элементы
