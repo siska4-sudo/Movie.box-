@@ -23,13 +23,29 @@
 </head>
 <body>
 
+    <!-- Кнопка меню (три полоски) -->
+    <button class="menu-trigger-btn" id="menu-btn">☰</button>
+
+    <!-- Затемнение и боковое меню -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <div class="sidebar" id="sidebar">
+        <button class="close-trigger-btn" id="close-btn">✕</button>
+        <div class="sidebar-links">
+            <a class="sidebar-item" href="#">Главная</a>
+            <a class="sidebar-item" href="#">Дорамы</a>
+            <a class="sidebar-item" href="#">Фильмы</a>
+        </div>
+    </div>
+
     <h1>Sasa Movie Box — Фильмы и Дорамы Онлайн</h1>
 
+    <!-- Поиск -->
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="Введите название дорамы или фильма...">
+        <input type="text" id="search-input" placeholder="Название или IMDb ID (например tt0232500)">
         <button id="search-button">Найти</button>
     </div>
 
+    <!-- Карточки фильмов и сериалов -->
     <div class="container">
         <div class="movies-grid"></div>
     </div>
