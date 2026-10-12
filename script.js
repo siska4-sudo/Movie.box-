@@ -1,5 +1,5 @@
 // 1. API ключ и адреса
-const API_KEY = "9714615b026618852258a19fe106562e";
+const API_KEY = "M93T1WN-K2X4FH2-NXFY35D-BQFEVYR";
 const API_URL = "https://api.themoviedb.org/3";
 const IMAGE_URL = "https://image.tmdb.org/t/p/w200";
 
@@ -38,7 +38,7 @@ async function searchDorama(query) {
         if (!doramas || doramas.length === 0) {
             resultsContainer.innerHTML = `
                 <div style="color: white; padding: 40px; text-align: center; width: 100%;">
-                    <h3>😕 Ничего не найдено</h3>
+                    <h3>😕 Ничего не найдено  0</h3>
                     <p>Попробуйте другое название</p>
                 </div>
             `;
