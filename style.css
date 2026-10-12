@@ -1,41 +1,170 @@
-<style>
-/* Кнопка три полоски */
-.menu-trigger-btn {
-    font-size: 32px;          /* Делаем полоски крупнее и заметнее */
-    background: none;         /* Убираем серый квадратный фон кнопки */
-    border: none;             /* Убираем рамку */
-    color: white;             /* Красим полоски в белый цвет */
-    cursor: pointer;          /* Меняем курсор при наведении */
-    padding: 10px;
-    position: fixed;          /* Кнопка будет всегда в левом верхнем углу, даже при скролле */
-    top: 15px;
-    left: 15px;
-    z-index: 1000;            /* Поднимаем кнопку на самый верхний слой, чтобы плееры её не перекрывали */
+/* ===== Общие настройки ===== */
+html {
+    scroll-behavior: smooth;
 }
 
-/* Боковая панель (изначально спрятана за левым краем экрана на -250px) */
-/* Боковая панель (шторка) */
+body {
+    background-color: #0a0a0a;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Заголовок сайта */
+h1 {
+    color: #ff0000;
+    font-size: 24px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* ===== Поиск ===== */
+.search-container {
+    margin: 10px 0 20px;
+}
+
+#search-input {
+    width: 70%;
+    max-width: 360px;
+    padding: 10px;
+    font-size: 16px;            /* 16px и больше, чтобы iPhone не увеличивал экран */
+    border: 1px solid #333;
+    border-radius: 6px;
+    background: #141414;
+    color: white;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+#search-button {
+    padding: 10px 16px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    background: #ff0000;
+    color: white;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+/* ===== Сетка карточек ===== */
+.container {
+    width: 100%;
+}
+
+/* Карточки переносятся на новые ряды и стоят по центру */
+.movies-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.movie-card {
+    width: calc(50% - 12px);    /* на телефоне две карточки в ряд */
+    min-width: 160px;
+    max-width: 280px;
+    background: #141414;
+    border: 1px solid #252525;
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Внутренний блок карточки (его создаёт script.js).
+   Перебиваем его размеры, чтобы карточка помещалась на телефоне */
+.movie-card > div {
+    width: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    box-sizing: border-box;
+}
+
+.movie-card img {
+    width: 100%;
+    height: auto;
+}
+
+/* Старые классы, на случай если понадобятся */
+.movie-title {
+    font-size: 14px;
+    color: #ffffff;
+    margin: 0 0 6px 0;
+    line-height: 1.2;
+}
+
+.movie-info p {
+    font-size: 11px;
+    margin: 2px 0;
+    color: #aaaaaa;
+}
+
+/* ===== Плеер ===== */
+.player-box iframe {
+    width: 100%;
+    height: 110px;
+    border: none;
+    border-radius: 6px;
+    margin-top: 8px;
+}
+
+/* Компьютер и планшет: карточки шире, плеер выше */
+@media (min-width: 768px) {
+    .movie-card {
+        width: 240px;
+    }
+    .player-box iframe {
+        height: 140px;
+    }
+}
+
+/* ===== Кнопка меню (три полоски) ===== */
+.menu-trigger-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    padding: 10px;
+    font-size: 32px;
+    line-height: 1;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+/* ===== Боковая панель (шторка) ===== */
 .sidebar {
     position: fixed;
     top: 0;
-    /* НА СТАРТЕ ПРЯЧЕМ МЕНЮ: сдвигаем его влево за экран на всю его ширину */
-    left: -250px; 
+    left: -250px;               /* на старте спрятана за левым краем */
     width: 250px;
     height: 100%;
     background-color: #141414;
-    box-shadow: 2px 0px 15px rgba(0, 0, 0, 0.7);
-    z-index: 1000; /* Поднимаем выше всего на странице */
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.7);
+    z-index: 1001;
     padding-top: 60px;
-    /* Плавная анимация выезда (0.3 секунды) */
-    transition: left 0.3s ease-in-out; 
+    box-sizing: border-box;
+    text-align: left;
+    overflow-y: auto;
+    transition: left 0.3s ease-in-out;
 }
 
-/* ЭТОТ КЛАСС АКТИВИРУЕТСЯ ПО КЛИКУ ЧЕРЕЗ JS: возвращает меню на экран */
+/* Этот класс добавляет script.js при открытии меню */
 .sidebar.active {
-    left: 0 !important; 
+    left: 0;
 }
 
-/* Темный фон-затемнение вокруг открытого меню */
+/* Затемнение фона за открытым меню */
 .sidebar-overlay {
     position: fixed;
     top: 0;
@@ -44,16 +173,14 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.6);
     z-index: 999;
-    /* НА СТАРТЕ ТОЖЕ ПРЯЧЕМ */
-    display: none; 
+    display: none;
 }
 
-/* Показываем фон, когда меню открыто */
 .sidebar-overlay.active {
-    display: block !important;
+    display: block;
 }
 
-/* Кнопка закрытия (крестик внутри меню) */
+/* Крестик внутри меню */
 .close-trigger-btn {
     position: absolute;
     top: 15px;
@@ -65,14 +192,11 @@
     cursor: pointer;
 }
 
-
-/* Контейнер для ссылок */
 .sidebar-links {
     display: flex;
     flex-direction: column;
 }
 
-/* Сами ссылки в меню */
 .sidebar-item {
     padding: 15px 20px;
     color: white;
@@ -86,94 +210,3 @@
     background-color: #222;
     color: #ff0000;
 }
-
-     {
-          scroll-behavior: smooth;
-         }
-        /* Стильный темный дизайн сайта */
-        /* Базовые настройки страницы */
-body {
-    background-color: #0a0a0a;
-    color: white;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 10px;
-    box-sizing: border-box;
-    
-    /* Включаем гибкий контейнер */
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;       /* Позволяет карточкам переноситься на новые ряды */
-    justify-content: center; /* Центрируем карточки на экране */
-    gap: 12px;             /* Аккуратный отступ между карточками */
-}
-
-/* Растягиваем шапку и поиск на всю ширину сверху, чтобы они не вставали в один ряд с фильмами */
-h1, .search-container, #menu-btn, #sidebar, .sidebar-overlay, header, nav {
-    flex-basis: 100%;
-    width: 100%;
-    text-align: center;
-}
-
-/* Главный заголовок сайта */
-h1 {
-    color: #ff0000;
-    font-size: 24px;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-/* УМЕНЬШАЕМ РАЗМЕР КАРТОЧЕК ДОРАМ */
-.movie-card {
-    /* На мобилке будет помещаться ровно по 2 фильма в ряд с учетом отступов */
-    width: calc(50% - 12px); 
-    min-width: 160px;       /* Защита от слишком сильного сжатия */
-    max-width: 280px;       /* Ограничение ширины для больших экранов */
-    background: #141414;
-    border: 1px solid #252525;
-    border-radius: 10px;
-    padding: 10px;
-    box-sizing: border-box;
-    
-    /* Выравниваем внутренности карточки */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-/* Уменьшаем шрифты под новый компактный размер */
-.movie-title {
-    font-size: 14px !important;
-    color: #ffffff;
-    margin: 0 0 6px 0 !important;
-    line-height: 1.2;
-}
-
-.movie-info p {
-    font-size: 11px !important;
-    margin: 2px 0 !important;
-    color: #aaaaaa;
-}
-
-/* УМЕНЬШАЕМ ВИДЕОПЛЕЕР ПОД РАЗМЕР КАРТОЧКИ */
-.player-box iframe {
-    width: 100% !important;
-    height: 110px !important; /* Уменьшенная высота, чтобы плеер аккуратно вставал в мини-карточку */
-    border-radius: 6px;
-    border: none;
-    margin-top: 8px;
-}
-
-/* Для больших экранов (компьютеры/планшеты) увеличиваем количество карточек в ряд */
-@media (min-width: 768px) {
-    .movie-card {
-        width: 240px;
-    }
-    .player-box iframe {
-        height: 140px !important;
-    }
-}
-
-
-
-    </style>
