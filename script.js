@@ -38,7 +38,7 @@ async function searchDorama(query) {
         if (!doramas || doramas.length === 0) {
             resultsContainer.innerHTML = `
                 <div style="color: white; padding: 40px; text-align: center; width: 100%;">
-                    <h3>😕 Ничего не найдено  0</h3>
+                    <h3>Ничего не найдено  0</h3>
                     <p>Попробуйте другое название</p>
                 </div>
             `;
