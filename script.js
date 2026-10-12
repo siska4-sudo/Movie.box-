@@ -1,6 +1,6 @@
 // ===== Настройки =====
-const API_TOKEN = "M93T1WN-K2X4FH2-NXFY35D-BQFEVYR";
-const API_URL = "https://api.poiskkino.dev";
+const API_KEY = "9714615b026618852258a19fe106562e";
+const API_URL = "https://api.themoviedb.org/3";
 const IMAGE_URL = "https://image.tmdb.org/t/p/w200";
 const NO_POSTER = "https://placehold.co/200x300/1a1a1a/ffffff?text=No+poster";
 
@@ -27,7 +27,7 @@ function showMessage(html) {
     </div>`;
 }
 
-// Создаёт карточку фильма или дорамы
+// Создаёт карточку фильма или сериала
 function createCard(item) {
   const isMovie = item.media_type === "movie";
   const title = escapeHtml(isMovie ? item.title : item.name) || "Без названия";
@@ -49,16 +49,25 @@ function createCard(item) {
   return card;
 }
 
-// Главная функция поиска
+// Главная функция поиска: по названию или по IMDb ID (например tt0232500)
 async function searchTitles() {
   const query = searchInput.value.trim();
   if (!query) return;
 
   showMessage("<p>⏳ Ищем...</p>");
 
+  const isImdbId = /^tt\d+$/i.test(query);
+
   try {
-    // search/multi ищет и фильмы, и сериалы
-    const url = `${API_URL}/search/multi?api_key=${API_KEY}&language=ru-RU&query=${encodeURIComponent(query)}`;
+    let url;
+    if (isImdbId) {
+      // Поиск по IMDb ID: TMDB возвращает фильмы и сериалы в отдельных списках
+      url = `${API_URL}/find/${query.toLowerCase()}?api_key=${API_KEY}&language=ru-RU&external_source=imdb_id`;
+    } else {
+      // Поиск по названию: фильмы и сериалы приходят в одном списке
+      url = `${API_URL}/search/multi?api_key=${API_KEY}&language=ru-RU&query=${encodeURIComponent(query)}`;
+    }
+
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -68,13 +77,22 @@ async function searchTitles() {
     }
 
     const data = await response.json();
-    // Оставляем только фильмы и сериалы, актёры нам не нужны
-    const items = (data.results || []).filter(
-      (item) => item.media_type === "movie" || item.media_type === "tv"
-    );
+    let items;
+
+    if (isImdbId) {
+      // Добавляем media_type вручную, чтобы карточка знала, фильм это или сериал
+      const movies = (data.movie_results || []).map((m) => ({ ...m, media_type: "movie" }));
+      const series = (data.tv_results || []).map((t) => ({ ...t, media_type: "tv" }));
+      items = [...movies, ...series];
+    } else {
+      // Оставляем только фильмы и сериалы, актёры нам не нужны
+      items = (data.results || []).filter(
+        (item) => item.media_type === "movie" || item.media_type === "tv"
+      );
+    }
 
     if (items.length === 0) {
-      showMessage("<h3>43 Ничего не найдено</h3><p>Попробуйте другое название</p>");
+      showMessage("<h3>😕 Ничего не найдено</h3><p>Попробуйте другое название или ID</p>");
       return;
     }
 
@@ -100,7 +118,8 @@ searchInput.addEventListener("keydown", (event) => {
 });
 
 // Подсказка при открытии страницы
-showMessage("<p>Введите название фильма или дорамы и нажмите «Найти»</p>");
+showMessage("<p>Введите название фильма или дорамы, либо IMDb ID (например tt0232500)</p>");
+
 // ===== Боковое меню =====
 const menuBtn = document.getElementById("menu-btn");
 const closeBtn = document.getElementById("close-btn");
