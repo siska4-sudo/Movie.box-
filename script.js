@@ -74,7 +74,7 @@ async function searchTitles() {
     );
 
     if (items.length === 0) {
-      showMessage("<h3>😕 Ничего не найдено</h3><p>Попробуйте другое название</p>");
+      showMessage("<h3>43 Ничего не найдено</h3><p>Попробуйте другое название</p>");
       return;
     }
 
