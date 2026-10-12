@@ -1,5 +1,5 @@
 // ===== Настройки =====
-const API_KEY = "9714615b026618852258a19fe106562e";
+const API_KEY = "dde9c3a4c22e3bc71fd5d3309382bee2";
 const API_URL = "https://api.themoviedb.org/3";
 const IMAGE_URL = "https://image.tmdb.org/t/p/w200";
 const NO_POSTER = "https://placehold.co/200x300/1a1a1a/ffffff?text=No+poster";
